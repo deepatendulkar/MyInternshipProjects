@@ -1,0 +1,83 @@
+import random
+
+rooms = {
+    "Entrance": "You stand at the entrance of a dark and eerie dungeon. The air is heavy with foreboding.",
+    "Treasure Room": "Congratulations, {name}! You have found the Treasure Room. The lost artifact awaits you!",
+    "Monster Room": "You are in a room with a ferocious monster guarding the path.",
+    "Library": "You enter a dusty library filled with ancient scrolls and books.",
+    "Alchemy Lab": "A room filled with strange bottles and bubbling potions lies before you.",
+    "Gallery": "The gallery is filled with mysterious paintings depicting forgotten legends.",
+    "Courtyard": "You step into a beautiful courtyard, bathed in moonlight.",
+}
+connections = {
+    "Entrance": ["Library", "Monster Room"],
+    "Library": ["Alchemy Lab", "Entrance"],
+    "Alchemy Lab": ["Gallery", "Library"],
+    "Gallery": ["Courtyard", "Alchemy Lab"],
+    "Courtyard": ["Treasure Room", "Gallery"],
+    "Monster Room": ["Entrance"],
+}
+current_room = "Entrance"
+
+found_artifact = False
+defeated_monster = False
+
+name = input("Welcome, brave adventurer! What is your name? ").strip().title()
+
+while True:
+    print(rooms[current_room].format(name=name))
+
+    if current_room == "Treasure Room" and found_artifact:
+        print(f"You, {name}, have already found the artifact. Congratulations, you won!")
+        break
+
+    if current_room == "Monster Room" and not defeated_monster:
+        print(f"A menacing monster blocks your path, {name}! You must defeat it to proceed.")
+        action = input(f"Choose an action (fight/retreat): ").lower()
+
+        if action == "fight":
+            if random.randint(0, 1):  
+                defeated_monster = True
+                print(f"You, {name}, defeated the monster and continue on your quest.")
+            else:
+                print(f"You, {name}, were defeated by the monster. Try again!")
+
+        elif action == "retreat":
+            print(f"You, {name}, wisely retreat from the monster room.")
+            current_room = "Entrance"
+            continue
+        else:
+            print("Invalid command. Please choose 'fight' or 'retreat'.")
+
+    action = input("Choose an action (move/quit): ").lower()
+
+    if action == "quit":
+        print(f"Thank you for playing, {name}! Goodbye!")
+        break
+
+    if action == "move":
+        available_rooms = connections[current_room]
+        print("You can move to: " + ", ".join(available_rooms))
+
+        destination = input("Where do you want to go? ").title()
+
+        if destination in available_rooms:
+            current_room = destination
+            if current_room == "Treasure Room":
+                if defeated_monster:
+                    print(f"You, {name}, have found the hidden artifact! You are victorious!")
+                    found_artifact = True
+                else:
+                    print(f"You, {name}, cannot access the treasure room until you defeat the monster.")
+            elif current_room == "Courtyard":
+                print(f"The courtyard holds a magical fountain that restores your strength, {name}.")
+        else:
+            print("You can't go that way. Choose another room.")
+    else:
+        print("Invalid command. Please choose a valid action (move/quit).")
+
+
+
+
+
+
