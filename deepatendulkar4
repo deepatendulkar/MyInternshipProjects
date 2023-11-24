@@ -1,0 +1,23 @@
+def length_converter():
+    print("Length Converter")
+    try:
+        value = float(input("Enter the length value: "))
+        source_unit = input("Enter the source unit (Meters or Feet): ").lower()
+        target_unit = input("Enter the required unit (Meters or Feet): ").lower()
+
+        if source_unit == target_unit:
+            result = value
+        elif source_unit == 'meters' and target_unit == 'feet':
+            result = value * 3.28084
+        elif source_unit == 'feet' and target_unit == 'meters':
+            result = value / 3.28084
+        else:
+            raise ValueError("Unsupported units for length conversion")
+
+        print(f"{value} {source_unit} is equal to {result:.2f} {target_unit}")
+
+    except ValueError as e:
+        print(f"Error: {e}")
+
+if __name__ == "__main__":
+    length_converter()
